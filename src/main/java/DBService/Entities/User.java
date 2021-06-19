@@ -1,8 +1,7 @@
-package Application.Entities;
+package DBService.Entities;
 
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 

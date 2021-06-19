@@ -1,8 +1,8 @@
-package Application.Service;
+package DBService.Service;
 
-import Application.Entities.Project;
-import Application.Entities.User;
-import Application.Repository.UserRepository;
+import DBService.Entities.Project;
+import DBService.Entities.User;
+import DBService.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package Application.Test;
+package DBService.Test;
 
 import java.sql.*;
 

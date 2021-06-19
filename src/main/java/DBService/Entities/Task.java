@@ -1,4 +1,4 @@
-package Application.Entities;
+package DBService.Entities;
 
 import lombok.Data;
 

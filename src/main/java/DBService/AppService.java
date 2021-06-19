@@ -1,14 +1,12 @@
-package Application;
+package DBService;
 
-import Application.Entities.Project;
-import Application.Entities.Task;
-import Application.Entities.User;
-import Application.Repository.ProjectRepository;
-import Application.Service.ProjectService;
-import Application.Service.TaskService;
-import Application.Service.UserService;
+import DBService.Entities.Project;
+import DBService.Entities.Task;
+import DBService.Entities.User;
+import DBService.Service.ProjectService;
+import DBService.Service.TaskService;
+import DBService.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
@@ -31,29 +29,32 @@ public class AppService {
     }
 
     public void test1() {
-        populateAll();
-        printAll();
-
-        setAll();
+        populateUsers();
         printAll();
     }
 
-    public void printAll(){
+    public String getAllByString(){
+        populateUsers();
+        return getAllUsers();
+    }
+
+    public void printAll() {
         printAllUsers();
         printAllTasks();
         printAllProjects();
     }
 
-    public void populateAll(){
+    public void populateAll() {
         populateUsers();
         populateTask();
         populateProjects();
     }
 
-    public void setAll(){
+    public void setAll() {
         setTasksOnUser();
         setUsersOnProject();
     }
+
     public void printAllUsers() {
         System.out.println("...Print All USERS...");
         LinkedList<User> result = userService.getAllUsers();
@@ -61,6 +62,17 @@ public class AppService {
             initUserTasks(user);
             System.out.println(user.toString());
         }
+    }
+
+    public String getAllUsers() {
+        System.out.println("...Print All USERS...");
+        String ans = "";
+        LinkedList<User> result = userService.getAllUsers();
+        for (User user : result) {
+            initUserTasks(user);
+            ans += user.toString() + "\n";
+        }
+        return ans;
     }
 
     public void printAllTasks() {
@@ -80,7 +92,7 @@ public class AppService {
         }
     }
 
-    public void setTasksOnUser(){
+    public void setTasksOnUser() {
         User user = userService.getUsersByName("Achek");
         Task task = taskService.getTaskById(2);
         taskService.setTaskOnUser(task, user);
@@ -89,7 +101,7 @@ public class AppService {
         System.out.println("...SET task IS DONE...");
     }
 
-    public void setUsersOnProject(){
+    public void setUsersOnProject() {
         Project project = projectService.getProjectByName("Project");
         User user = userService.getUserById(2);
         userService.setUserOnProject(user, project);
@@ -98,11 +110,11 @@ public class AppService {
         System.out.println("...SET user IS DONE...");
     }
 
-    public void initUserTasks(User user){
+    public void initUserTasks(User user) {
         user.setTasks(taskService.getUserTasks(user));
     }
 
-    public void initProjectUsers(Project project){
+    public void initProjectUsers(Project project) {
         project.setUsers(userService.getProjectUsers(project));
     }
 
@@ -114,7 +126,7 @@ public class AppService {
         //service.addUser("Achek");
     }
 
-    public void populateTask(){
+    public void populateTask() {
         taskService.addTask("Create proj");
         taskService.addTask("Create proj_2");
         taskService.addTask("Create proj_3");
@@ -122,7 +134,7 @@ public class AppService {
 
     }
 
-    public void populateProjects(){
+    public void populateProjects() {
         projectService.addProject("Project");
         projectService.addProject("Project_2");
         projectService.addProject("Project_3");

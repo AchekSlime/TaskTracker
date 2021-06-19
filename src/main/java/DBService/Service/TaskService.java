@@ -1,8 +1,8 @@
-package Application.Service;
+package DBService.Service;
 
-import Application.Entities.Task;
-import Application.Entities.User;
-import Application.Repository.TaskRepository;
+import DBService.Entities.Task;
+import DBService.Entities.User;
+import DBService.Repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

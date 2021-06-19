@@ -1,7 +1,7 @@
-package Application.Repository;
+package DBService.Repository;
 
-import Application.Entities.User;
-import Application.DataSource.DataSource;
+import DBService.Entities.User;
+import DBService.DataSource.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;

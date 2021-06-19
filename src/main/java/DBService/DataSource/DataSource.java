@@ -1,4 +1,4 @@
-package Application.DataSource;
+package DBService.DataSource;
 
 import lombok.Getter;
 import lombok.Setter;
