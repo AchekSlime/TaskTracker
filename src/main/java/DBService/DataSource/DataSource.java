@@ -46,6 +46,30 @@ public class DataSource {
         connection = DriverManager.getConnection(url, username, password);
     }
 
+    public boolean checkTable(String name) throws SQLException {
+        boolean chk = true;
+        boolean doCreate = false;
+        try {
+            statement.execute("update " + name + " set id = 5, where 1=3");
+        } catch (SQLException sqle) {
+            String theError = (sqle).getSQLState();
+            //   System.out.println("  Utils GOT:  " + theError);
+            /** If table exists will get -  WARNING 02000: No row was found **/
+            if (theError.equals("42X05"))   // Table does not exist
+            {
+                return false;
+            } else if (theError.equals("42X14") || theError.equals("42821")) {
+                System.out.println("checkTable: Incorrect table definition. Drop table WISH_LIST and rerun this program");
+                throw sqle;
+            } else {
+                System.out.println("checkTable: Unhandled SQLException");
+                throw sqle;
+            }
+        }
+        //  System.out.println("Just got the warning - table exists OK ");
+        return true;
+    }
+
     private void createStatement() throws SQLException{
         statement = connection.createStatement();
     }

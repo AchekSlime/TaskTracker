@@ -8,16 +8,18 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 
-public class Menu extends Application {
+public class MainMenu extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/test.fxml");
+        URL xmlUrl = getClass().getResource("/View/MainMenuView.fxml");
         loader.setLocation(xmlUrl);
         Parent root = loader.load();
+        primaryStage.setResizable(false);
 
         primaryStage.setScene(new Scene(root));
+        primaryStage.setOnCloseRequest((windowEvent) -> {primaryStage.close();});
         primaryStage.show();
     }
 

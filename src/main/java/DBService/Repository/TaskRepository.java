@@ -50,6 +50,10 @@ public class TaskRepository {
         return statement.executeQuery("select * from task where id = " + id);
     }
 
+    public ResultSet getByTitle(String title) throws SQLException {
+        return statement.executeQuery("select * from task where title = '" + title + "'");
+    }
+
     public ResultSet getTaskByUserId(int userId) throws SQLException {
         return statement.executeQuery("select * from task where user_id = " + userId);
     }

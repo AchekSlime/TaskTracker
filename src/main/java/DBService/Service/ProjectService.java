@@ -2,6 +2,7 @@ package DBService.Service;
 
 import DBService.Entities.Project;
 import DBService.Repository.ProjectRepository;
+import DBService.Utils.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,63 +20,61 @@ public class ProjectService {
         projectRepository.initialize();
     }
 
-    public Project addProject(String name) {
+    public Project addProject(String name) throws ServiceException {
         Project newProject = new Project(name);
 
         try {
             projectRepository.addProject(newProject);
         } catch (SQLException sqlEX) {
-            System.out.println(sqlEX.getMessage());
+           throw new ServiceException("Project  with  this  name  already  exists", sqlEX.getMessage());
         }
 
         return newProject;
     }
 
-    public LinkedList<Project> getAll() {
+    public LinkedList<Project> getAllProjects() throws ServiceException {
         ResultSet sqlResponse;
         try {
             sqlResponse = projectRepository.getAll();
             return getProjectsFromResponse(sqlResponse);
         } catch (SQLException sqlEX) {
-            System.out.println(sqlEX.getMessage());
+            throw new ServiceException("Exception  while  getting  all  projects", sqlEX.getMessage());
         }
-
-        return null;
     }
 
-    public Project getProjectByName(String name) {
+    public Project getProjectByName(String name) throws ServiceException {
         ResultSet sqlResponse;
         try {
             sqlResponse = projectRepository.getByName(name);
             return getProjectsFromResponse(sqlResponse).get(0);
         } catch (SQLException sqlEX) {
-            System.out.println(sqlEX.getMessage());
+            throw new ServiceException("Couldn't  find  the  project  with  this  name",  sqlEX.getMessage());
         }
 
-        return null;
+        //return null;
     }
 
-    public Project getProjectById(int id) {
+    public Project getProjectById(int id) throws ServiceException {
         ResultSet sqlResponse;
         try {
             sqlResponse = projectRepository.getById(id);
             return getProjectsFromResponse(sqlResponse).get(0);
         } catch (SQLException sqlEX) {
-            System.out.println(sqlEX.getMessage());
+            throw new ServiceException("Couldn't  find  the  project",  sqlEX.getMessage());
         }
 
-        return null;
+        //return null;
     }
 
-    public void deleteProject(Project project) {
+    public void deleteProject(Project project) throws ServiceException {
         try {
             projectRepository.deleteById(project.getId());
         } catch (SQLException sqlEX) {
-            System.out.println(sqlEX.getMessage());
+            throw new ServiceException("Couldn't  delete  a  project  with  this  name",  sqlEX.getMessage());
         }
     }
 
-    public LinkedList<Project> getProjectsFromResponse(ResultSet sqlResponse) throws SQLException {
+    private LinkedList<Project> getProjectsFromResponse(ResultSet sqlResponse) throws SQLException {
         LinkedList<Project> result = new LinkedList<>();
         while (sqlResponse.next()) {
             Project project = new Project(sqlResponse.getString(2));

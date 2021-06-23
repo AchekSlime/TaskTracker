@@ -11,12 +11,6 @@ public class ApplicationConfig {
     private static ApplicationContext applicationContext;
     private static AppService service;
 
-    public static void main(String[] args) {
-
-        service = applicationContext.getBean(AppService.class);
-        //service.test1();
-    }
-
     public AppService getService() {
         applicationContext = new AnnotationConfigApplicationContext(ApplicationConfig.class);
         return applicationContext.getBean(AppService.class);

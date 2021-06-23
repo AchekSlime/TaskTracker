@@ -6,12 +6,16 @@ import DBService.Entities.User;
 import DBService.Service.ProjectService;
 import DBService.Service.TaskService;
 import DBService.Service.UserService;
+import DBService.Utils.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 @Component
+@Scope(value="singleton")
 public class AppService {
     private final UserService userService;
     private final TaskService taskService;
@@ -26,119 +30,184 @@ public class AppService {
         this.projectService.initialize();
         this.userService.initialize();
         this.taskService.initialize();
+
+        populateAll();
     }
 
-    public void test1() {
-        populateUsers();
-        printAll();
-    }
-
-    public String getAllByString(){
-        populateUsers();
-        return getAllUsers();
-    }
-
-    public void printAll() {
-        printAllUsers();
-        printAllTasks();
-        printAllProjects();
-    }
-
-    public void populateAll() {
-        populateUsers();
-        populateTask();
-        populateProjects();
-    }
-
-    public void setAll() {
-        setTasksOnUser();
-        setUsersOnProject();
-    }
-
-    public void printAllUsers() {
-        System.out.println("...Print All USERS...");
+    public String getAllUsersAsString() throws ServiceException {
+        StringBuilder ans = new StringBuilder();
+        ans.append("\t\t\t\t\t. . . ALL USERS . . .\n\n");
         LinkedList<User> result = userService.getAllUsers();
         for (User user : result) {
             initUserTasks(user);
-            System.out.println(user.toString());
+            if(user.getProjectId() != 0)
+                user.setProjectHolder(projectService.getProjectById(user.getProjectId()));
+            ans.append(user).append("\n");
         }
+        return ans.toString();
     }
 
-    public String getAllUsers() {
-        System.out.println("...Print All USERS...");
-        String ans = "";
-        LinkedList<User> result = userService.getAllUsers();
-        for (User user : result) {
-            initUserTasks(user);
-            ans += user.toString() + "\n";
-        }
-        return ans;
-    }
-
-    public void printAllTasks() {
-        System.out.println("...Print All TASKS...");
+    public String getAllTasksAsString() throws ServiceException {
+        StringBuilder ans = new StringBuilder();
+        ans.append("\t\t\t\t\t. . . ALL TASKS . . .\n\n");
         LinkedList<Task> result = taskService.getAllTasks();
         for (Task task : result) {
-            System.out.println(task.toString());
+            if(task.getUserId() != 0)
+                task.setUserHolder(userService.getUserById(task.getUserId()));
+            ans.append(task.toString()).append("\n");
         }
+        return ans.toString();
     }
 
-    public void printAllProjects() {
-        System.out.println("...Print All Projects...");
-        LinkedList<Project> result = projectService.getAll();
+    public String getAllProjectsAsString() throws ServiceException {
+        StringBuilder ans = new StringBuilder();
+        ans.append("\t\t\t\t\t. . . ALL PROJECTS . . .\n\n");
+        LinkedList<Project> result = projectService.getAllProjects();
         for (Project project : result) {
             initProjectUsers(project);
-            System.out.println(project.toString());
+            ans.append(project.toString()).append("\n");
         }
+        return ans.toString();
     }
 
-    public void setTasksOnUser() {
-        User user = userService.getUsersByName("Achek");
-        Task task = taskService.getTaskById(2);
+    public String getUserByNameAsString(String name) throws ServiceException{
+        User user = userService.getUsersByName(name);
+        initUserTasks(user);
+        if(user.getProjectId() != 0)
+            user.setProjectHolder(projectService.getProjectById(user.getProjectId()));
+        return user.toString();
+    }
+
+    public String getTaskByTitleAsString(String title) throws ServiceException {
+        Task task = taskService.getTaskByTitle(title);
+        System.out.println(task.getUserId());
+
+        if(task.getUserId() != 0)
+            task.setUserHolder(userService.getUserById(task.getUserId()));
+        return task.toString();
+    }
+
+    public String getProjectByNameAsString(String name) throws ServiceException {
+        Project project = projectService.getProjectByName(name);
+        initProjectUsers(project);
+        return project.toString();
+    }
+
+    public void setTasksOnUser(String taskTitle, String userName) throws ServiceException {
+        User user = userService.getUsersByName(userName);
+        Task task = taskService.getTaskByTitle(taskTitle);
         taskService.setTaskOnUser(task, user);
-        task = taskService.getTaskById(3);
-        taskService.setTaskOnUser(task, user);
-        System.out.println("...SET task IS DONE...");
     }
 
-    public void setUsersOnProject() {
-        Project project = projectService.getProjectByName("Project");
-        User user = userService.getUserById(2);
+    public void setUsersOnProject(String userName, String projectName) throws ServiceException {
+        Project project = projectService.getProjectByName(projectName);
+        User user = userService.getUsersByName(userName);
         userService.setUserOnProject(user, project);
-        user = userService.getUserById(4);
-        userService.setUserOnProject(user, project);
-        System.out.println("...SET user IS DONE...");
     }
 
-    public void initUserTasks(User user) {
+    public ArrayList<String> getAllUserNames() throws ServiceException {
+        ArrayList<String> names = new ArrayList<>();
+        LinkedList<User> allUsers = userService.getAllUsers();
+        for(User user: allUsers){
+            names.add(user.getName());
+        }
+        return names;
+    }
+
+    public ArrayList<String> getAllTaskTitles() throws ServiceException {
+        ArrayList<String> titles = new ArrayList<>();
+        LinkedList<Task> allTasks = taskService.getAllTasks();
+        for(Task task: allTasks){
+            titles.add(task.getTitle());
+        }
+        return titles;
+    }
+
+    public ArrayList<String> getAllProjectNames() throws ServiceException {
+        ArrayList<String> names = new ArrayList<>();
+        LinkedList<Project> allProjects = projectService.getAllProjects();
+        for(Project project: allProjects){
+            names.add(project.getName());
+        }
+        return names;
+    }
+
+    public void addTask(String title) throws ServiceException {
+        taskService.addTask(title);
+    }
+
+    public void addUser(String name) throws ServiceException {
+        userService.addUser(name);
+    }
+
+    public void addProject(String name) throws ServiceException {
+        projectService.addProject(name);
+    }
+
+    public void deleteTask(String title) throws ServiceException {
+        taskService.deleteTask(taskService.getTaskByTitle(title));
+    }
+
+    public void deleteUser(String name) throws ServiceException {
+        userService.deleteUser(userService.getUsersByName(name));
+    }
+
+    public void deleteProject(String name) throws ServiceException {
+        projectService.deleteProject(projectService.getProjectByName(name));
+    }
+
+    private void initUserTasks(User user) throws ServiceException {
         user.setTasks(taskService.getUserTasks(user));
     }
 
-    public void initProjectUsers(Project project) {
+    private void initProjectUsers(Project project) throws ServiceException {
         project.setUsers(userService.getProjectUsers(project));
     }
 
-    public void populateUsers() {
+    private void populateAll() {
+        try {
+            if(userService.getAllUsers().isEmpty())
+                populateUsers();
+            if(taskService.getAllTasks().isEmpty())
+                populateTask();
+            if(projectService.getAllProjects().isEmpty())
+                populateProjects();
+        } catch(ServiceException serviceEx){
+            System.out.println(serviceEx.message());
+            System.out.println(serviceEx.sysMessage());
+        }
+
+    }
+
+    // хардкод ¯\(ツ)/–
+
+    private void populateUsers() throws ServiceException {
         userService.addUser("Egor");
-        userService.addUser("Egor_2");
-        userService.addUser("Egor_3");
-        userService.addUser("Achek");
-        //service.addUser("Achek");
+        userService.addUser("Artem");
+        userService.addUser("Alex");
+        userService.addUser("Pavel");
+        userService.addUser("Andrew");
+        userService.addUser("Tony");
+        userService.addUser("Stark");
     }
 
-    public void populateTask() {
-        taskService.addTask("Create proj");
-        taskService.addTask("Create proj_2");
-        taskService.addTask("Create proj_3");
-        taskService.addTask("Create proj_4");
-
+    private void populateTask() throws ServiceException {
+        taskService.addTask("Bring some coffee");
+        taskService.addTask("Raise the server");
+        taskService.addTask("Re-design the menu");
+        taskService.addTask("Develop a personal account");
+        taskService.addTask("Develop an api");
+        taskService.addTask("Optimize sys search");
+        taskService.addTask("Order food");
+        taskService.addTask("Rewrite the kernel");
+        taskService.addTask("Develop a mobile app design");
+        taskService.addTask("Assign tasks to employees");
     }
 
-    public void populateProjects() {
-        projectService.addProject("Project");
-        projectService.addProject("Project_2");
-        projectService.addProject("Project_3");
-        projectService.addProject("Project_4");
-
+    private void populateProjects() throws ServiceException {
+        projectService.addProject("BackEnd");
+        projectService.addProject("FrontEnd");
+        projectService.addProject("SystemDev");
+        projectService.addProject("Management");
     }
 }
