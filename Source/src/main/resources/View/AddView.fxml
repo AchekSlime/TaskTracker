@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="181.0" prefWidth="360.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.Modal.AddViewController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="126.0" minWidth="7.0" prefWidth="19.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="161.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="26.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="139.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="6.0" prefWidth="20.0" />
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="18.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="106.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="106.0" minHeight="10.0" prefHeight="16.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="21.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <Label fx:id="nameLabel" text="Name:" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+        <Label fx:id="holderLabel" text="Holder:" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+        <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonOnAction" text="Add" GridPane.columnSpan="6" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+        <TextField fx:id="nameTextField" onAction="#nameTextFieldOnAction" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+        <ComboBox fx:id="holderComboBox" onAction="#holderComboBoxOnAction" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+    </children>
+</GridPane>
