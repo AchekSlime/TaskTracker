@@ -17,11 +17,12 @@ public class ProjectService implements EntityService{
     @Autowired
     ProjectRepository projectRepository;
 
+    @Override
     public void initialize() {
         projectRepository.initialize();
     }
 
-
+    @Override
     public Project add(String name) throws ServiceException {
         Project newProject = new Project(name);
 
@@ -34,6 +35,7 @@ public class ProjectService implements EntityService{
         return newProject;
     }
 
+    @Override
     public LinkedList<Project> getAll() throws ServiceException {
         ResultSet sqlResponse;
         try {
@@ -44,6 +46,7 @@ public class ProjectService implements EntityService{
         }
     }
 
+    @Override
     public Project getByName(String name) throws ServiceException {
         ResultSet sqlResponse;
         try {
@@ -56,6 +59,7 @@ public class ProjectService implements EntityService{
         //return null;
     }
 
+    @Override
     public Project getById(int id) throws ServiceException {
         ResultSet sqlResponse;
         try {
@@ -67,6 +71,7 @@ public class ProjectService implements EntityService{
         //return null;
     }
 
+    @Override
     public void delete(int id) throws ServiceException {
         try {
             projectRepository.deleteById(id);

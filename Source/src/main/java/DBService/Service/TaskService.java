@@ -18,10 +18,12 @@ public class TaskService implements EntityService{
     @Autowired
     TaskRepository taskRepository;
 
+    @Override
     public void initialize() {
         taskRepository.initialize();
     }
 
+    @Override
     public Task add(String name) throws ServiceException  {
         Task newTask = new Task(name);
 
@@ -34,6 +36,7 @@ public class TaskService implements EntityService{
         return newTask;
     }
 
+    @Override
     public LinkedList<Task> getAll() throws ServiceException {
         ResultSet sqlResponse;
         try {
@@ -45,6 +48,7 @@ public class TaskService implements EntityService{
         //return null;
     }
 
+    @Override
     public Task getById(int id) throws ServiceException {
         ResultSet sqlResponse;
         try {
@@ -56,6 +60,7 @@ public class TaskService implements EntityService{
         //return null;
     }
 
+    @Override
     public Task getByName(String name) throws ServiceException {
         ResultSet sqlResponse;
         try {
@@ -78,6 +83,7 @@ public class TaskService implements EntityService{
         //return null;
     }
 
+    @Override
     public void delete(int id) throws ServiceException {
         try {
             taskRepository.deleteById(id);

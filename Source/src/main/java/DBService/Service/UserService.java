@@ -75,6 +75,7 @@ public class UserService implements EntityService{
         //return null;
     }
 
+    @Override
     public void delete(int id) throws ServiceException {
         try {
             userRepository.deleteById(id);
